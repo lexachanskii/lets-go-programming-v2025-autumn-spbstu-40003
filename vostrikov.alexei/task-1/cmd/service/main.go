@@ -7,7 +7,6 @@ import (
 )
 
 func main() {
-
 	res, err := calc.Calculate()
 
 	if err != nil {
@@ -16,5 +15,4 @@ func main() {
 	}
 
 	fmt.Println(res)
-
 }

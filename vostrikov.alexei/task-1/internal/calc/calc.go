@@ -7,7 +7,6 @@ import (
 )
 
 func input() (int, int, string, error) {
-
 	var str1 string
 	var str2 string
 	var symbol string
@@ -15,7 +14,6 @@ func input() (int, int, string, error) {
 	var num1, num2 int
 
 	var errCode error
-	var errorFlag bool = false
 
 	_, err1 := fmt.Scanln(&str1)
 	_, err2 := fmt.Scanln(&str2)
@@ -23,53 +21,43 @@ func input() (int, int, string, error) {
 
 	if err1 == nil {
 		temp, convErr := strconv.Atoi(str1)
-		if convErr != nil && !errorFlag {
+		if convErr != nil {
 			errCode = errors.New("Invalid first operand")
-			errorFlag = true
 		} else {
 			num1 = temp
 		}
 	} else {
 		errCode = errors.New(err1.Error())
-		errorFlag = true
 	}
 	if err2 == nil {
 		temp, convErr := strconv.Atoi(str2)
-		if convErr != nil && !errorFlag {
+		if convErr != nil {
 			errCode = errors.New("Invalid second operand")
-			errorFlag = true
 		} else {
 			num2 = temp
 		}
 	} else {
 		errCode = errors.New(err2.Error())
-		errorFlag = true
 	}
 	if err3 != nil {
 		errCode = errors.New(err3.Error())
-		errorFlag = true
 	} else {
-		if !validate(symbol) && !errorFlag {
+		if !validate(symbol) {
 			errCode = errors.New("Invalid operation")
-			errorFlag = true
-
-		} else if (str2 == "0") && (symbol == "/") && !errorFlag {
+		} else if (str2 == "0") && (symbol == "/") {
 			errCode = errors.New("Division by zero")
-			errorFlag = true
 		}
 	}
-
 	return num1, num2, symbol, errCode
 }
 
 func Calculate() (float32, error) {
+	num1, num2, symbol, errCode := input()
 
-	num1, num2, symbol, err_code := input()
+	var res float32
 
-	var res float32 = 0.0
-
-	if err_code != nil {
-		return res, err_code
+	if errCode != nil {
+		return res, errCode
 	}
 
 	switch symbol {
@@ -82,7 +70,6 @@ func Calculate() (float32, error) {
 	case "/":
 		res = float32(num1) / float32(num2)
 	}
-
 	return res, nil
 }
 
