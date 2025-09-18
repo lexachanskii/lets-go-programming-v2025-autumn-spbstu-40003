@@ -1,52 +1,94 @@
 package calc
 
 import (
+	"errors"
 	"fmt"
-	"os"
+	"strconv"
 )
 
-func Calculate() {
+func input() (int, int, string, error) {
 
-	var num1 int
-	var num2 int
+	var str1 string
+	var str2 string
 	var symbol string
 
-	if _, err := fmt.Scanln(&num1); err != nil {
-		fmt.Println("Invalid first operand")
-		os.Exit(1)
-	}
-	if _, err := fmt.Scanln(&num2); err != nil {
-		fmt.Println("Invalid second operand")
-		os.Exit(1)
-	}
-	if _, err := fmt.Scanln(&symbol); err != nil {
-		fmt.Println("Problem in symbol")
-		os.Exit(1)
-	} else {
-		if !validate(symbol) {
-			fmt.Println("Invalid operation")
-			os.Exit(1)
-		} else if (num2 == 0) && (symbol == "/") {
-			fmt.Println("Division by zero")
-			os.Exit(1)
+	var err_code error
+	var error_flag bool = false
+
+	if _, err := fmt.Scanln(&str1); err == nil {
+
+		if _, err := strconv.Atoi(str1); err != nil && !error_flag {
+			err_code = errors.New("invalid first operand")
+			error_flag = true
 		}
+	} else {
+		err_code = errors.New(err.Error())
+		error_flag = true
+	}
+
+	if _, err := fmt.Scanln(&str2); err == nil {
+
+		if _, err := strconv.Atoi(str2); err != nil && !error_flag {
+			err_code = errors.New("invalid second operand")
+			error_flag = true
+		}
+	} else {
+		err_code = errors.New(err.Error())
+		error_flag = true
+	}
+
+	if _, err := fmt.Scanln(&symbol); err != nil {
+
+		err_code = errors.New("problem in symbol")
+		error_flag = true
+
+	} else {
+		if !validate(symbol) && !error_flag {
+
+			err_code = errors.New("invalid operation")
+			error_flag = true
+
+		} else if (str2 == "0") && (symbol == "/") && !error_flag {
+
+			err_code = errors.New("division by zero")
+			error_flag = true
+
+		}
+	}
+
+	num1, _ := strconv.Atoi(str1)
+	num2, _ := strconv.Atoi(str2)
+
+	return num1, num2, symbol, err_code
+}
+
+func Calculate() (float32, error) {
+
+	num1, num2, symbol, err_code := input()
+
+	var res float32 = 0.0
+
+	if err_code != nil {
+		return res, err_code
 	}
 
 	switch symbol {
 	case "+":
-		fmt.Println(num1 + num2)
+		res = float32(num1 + num2)
 	case "-":
-		fmt.Println(num1 - num2)
+		res = float32(num1 - num2)
 	case "*":
-		fmt.Println(num1 * num2)
+		res = float32(num1 * num2)
 	case "/":
-		fmt.Println(float32(num1) / float32(num2))
+		res = float32(num1) / float32(num2)
 	}
+
+	return res, nil
 }
 
 func validate(str string) bool {
 
-	var correct [4]string = [4]string{"-", "+", "*", "/"}
+	var correct = [4]string{"-", "+", "*", "/"}
 
 	for i := 0; i < len(correct); i++ {
 		if str == correct[i] {

@@ -1,9 +1,20 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/lexachanskii/task-1/internal/calc"
 )
 
 func main() {
-	calc.Calculate()
+
+	res, err := calc.Calculate()
+
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	fmt.Println(res)
+
 }
