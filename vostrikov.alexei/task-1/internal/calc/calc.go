@@ -74,7 +74,6 @@ func Calculate() (float32, error) {
 }
 
 func validate(str string) bool {
-
 	var correct = [4]string{"-", "+", "*", "/"}
 
 	for i := 0; i < len(correct); i++ {
