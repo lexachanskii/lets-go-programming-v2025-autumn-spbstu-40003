@@ -11,7 +11,7 @@ func main() {
 	res, err := calc.Calculate()
 
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return
 	}
 

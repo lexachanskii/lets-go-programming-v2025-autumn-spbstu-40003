@@ -12,54 +12,54 @@ func input() (int, int, string, error) {
 	var str2 string
 	var symbol string
 
-	var err_code error
-	var error_flag bool = false
+	var num1, num2 int
 
-	if _, err := fmt.Scanln(&str1); err == nil {
+	var errCode error
+	var errorFlag bool = false
 
-		if _, err := strconv.Atoi(str1); err != nil && !error_flag {
-			err_code = errors.New("invalid first operand")
-			error_flag = true
+	_, err1 := fmt.Scanln(&str1)
+	_, err2 := fmt.Scanln(&str2)
+	_, err3 := fmt.Scanln(&symbol)
+
+	if err1 == nil {
+		temp, convErr := strconv.Atoi(str1)
+		if convErr != nil && !errorFlag {
+			errCode = errors.New("Invalid first operand")
+			errorFlag = true
+		} else {
+			num1 = temp
 		}
 	} else {
-		err_code = errors.New(err.Error())
-		error_flag = true
+		errCode = errors.New(err1.Error())
+		errorFlag = true
 	}
-
-	if _, err := fmt.Scanln(&str2); err == nil {
-
-		if _, err := strconv.Atoi(str2); err != nil && !error_flag {
-			err_code = errors.New("invalid second operand")
-			error_flag = true
+	if err2 == nil {
+		temp, convErr := strconv.Atoi(str2)
+		if convErr != nil && !errorFlag {
+			errCode = errors.New("Invalid second operand")
+			errorFlag = true
+		} else {
+			num2 = temp
 		}
 	} else {
-		err_code = errors.New(err.Error())
-		error_flag = true
+		errCode = errors.New(err2.Error())
+		errorFlag = true
 	}
-
-	if _, err := fmt.Scanln(&symbol); err != nil {
-
-		err_code = errors.New("problem in symbol")
-		error_flag = true
-
+	if err3 != nil {
+		errCode = errors.New(err3.Error())
+		errorFlag = true
 	} else {
-		if !validate(symbol) && !error_flag {
+		if !validate(symbol) && !errorFlag {
+			errCode = errors.New("Invalid operation")
+			errorFlag = true
 
-			err_code = errors.New("invalid operation")
-			error_flag = true
-
-		} else if (str2 == "0") && (symbol == "/") && !error_flag {
-
-			err_code = errors.New("division by zero")
-			error_flag = true
-
+		} else if (str2 == "0") && (symbol == "/") && !errorFlag {
+			errCode = errors.New("Division by zero")
+			errorFlag = true
 		}
 	}
 
-	num1, _ := strconv.Atoi(str1)
-	num2, _ := strconv.Atoi(str2)
-
-	return num1, num2, symbol, err_code
+	return num1, num2, symbol, errCode
 }
 
 func Calculate() (float32, error) {
