@@ -7,58 +7,54 @@ import (
 )
 
 func input() (int, int, string, error) {
-	var str1 string
-	var str2 string
-	var symbol string
+	var (
+		str1   string
+		str2   string
+		symbol string
 
-	var num1, num2 int
+		num1, num2 int
+	)
 
-	var errCode error
-
-	_, err1 := fmt.Scanln(&str1)
-	_, err2 := fmt.Scanln(&str2)
-	_, err3 := fmt.Scanln(&symbol)
-
-	if err1 == nil {
-		temp, convErr := strconv.Atoi(str1)
-		if convErr != nil {
-			errCode = errors.New("Invalid first operand")
-		} else {
-			num1 = temp
-		}
-	} else {
-		errCode = errors.New(err1.Error())
+	_, err := fmt.Scanln(&str1)
+	if err != nil {
+		return 0, 0, "", errors.New("Invalid first operand")
 	}
-	if err2 == nil {
-		temp, convErr := strconv.Atoi(str2)
-		if convErr != nil {
-			errCode = errors.New("Invalid second operand")
-		} else {
-			num2 = temp
-		}
-	} else {
-		errCode = errors.New(err2.Error())
+	num1, err = strconv.Atoi(str1)
+	if err != nil {
+		return 0, 0, "", errors.New("Invalid first operand")
 	}
-	if err3 != nil {
-		errCode = errors.New(err3.Error())
-	} else {
-		if !validate(symbol) {
-			errCode = errors.New("Invalid operation")
-		} else if (str2 == "0") && (symbol == "/") {
-			errCode = errors.New("Division by zero")
-		}
+
+	_, err = fmt.Scanln(&str2)
+	if err != nil {
+		return 0, 0, "", errors.New("Invalid second operand")
 	}
-	return num1, num2, symbol, errCode
+	num2, err = strconv.Atoi(str2)
+	if err != nil {
+		return 0, 0, "", errors.New("Invalid second operand")
+	}
+
+	_, err = fmt.Scanln(&symbol)
+	if err != nil {
+		return 0, 0, "", errors.New("Problem in symbol")
+	}
+	if !validate(symbol) {
+		return 0, 0, "", errors.New("Invalid operation")
+	}
+	if symbol == "/" && str2 == "0" {
+		return 0, 0, "", errors.New("Division by zero")
+	}
+
+	return num1, num2, symbol, nil
 }
 
 func Calculate() (float32, error) {
 	num1, num2, symbol, errCode := input()
 
-	var res float32
-
 	if errCode != nil {
-		return res, errCode
+		return 0, errCode
 	}
+
+	var res float32
 
 	switch symbol {
 	case "+":
