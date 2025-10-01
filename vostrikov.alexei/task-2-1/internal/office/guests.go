@@ -103,6 +103,6 @@ func validateTemp(symbol, temp string) (int, bool, error) {
 	case ">=":
 		return value, true, nil
 	default:
-		return 0, false, errors.New("could not match symbol - " + symbol)
+		return 0, false, errors.New("could not match symbol")
 	}
 }
