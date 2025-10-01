@@ -16,7 +16,7 @@ func ClimateControl() error {
 		return fmt.Errorf("error while reading departments count: %w", err)
 	}
 
-	for range departments { // Go 1.22+: диапазон 0..departments-1
+	for range departments {
 		if _, err := fmt.Scanln(&employee); err != nil {
 			return fmt.Errorf("error while reading employee count: %w", err)
 		}
@@ -33,11 +33,11 @@ func tempControl(employee int) error {
 	var (
 		symbol string
 		temp   string
+		broken bool
 	)
 
 	lower := 15
 	higher := 30
-	var broken bool
 
 	for range employee {
 		if _, err := fmt.Scanln(&symbol, &temp); err != nil {
@@ -56,9 +56,9 @@ func tempControl(employee int) error {
 		}
 
 		if isHigher {
-
 			if tempInt > higher {
 				broken = true
+
 				fmt.Println(-1)
 
 				continue
@@ -75,6 +75,7 @@ func tempControl(employee int) error {
 
 		if tempInt < lower {
 			broken = true
+
 			fmt.Println(-1)
 
 			continue
