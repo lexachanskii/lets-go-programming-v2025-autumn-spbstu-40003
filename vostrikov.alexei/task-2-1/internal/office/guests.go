@@ -12,79 +12,90 @@ func ClimateControl() error {
 		employee    int
 	)
 
-	_, err := fmt.Scanln(&departments)
-	if err != nil {
+	if _, err := fmt.Scanln(&departments); err != nil {
 		return fmt.Errorf("error while reading departments count: %w", err)
 	}
 
-	for department := 0; department < departments; department++ {
-		_, err := fmt.Scanln(&employee)
-		if err != nil {
+	for range departments { // Go 1.22+: диапазон 0..departments-1
+		if _, err := fmt.Scanln(&employee); err != nil {
 			return fmt.Errorf("error while reading employee count: %w", err)
 		}
-		err = tempControl(employee)
-		if err != nil {
-			return fmt.Errorf("error in temprature control: %w", err)
+
+		if err := tempControl(employee); err != nil {
+			return fmt.Errorf("error in temperature control: %w", err)
 		}
 	}
+
 	return nil
 }
 
 func tempControl(employee int) error {
 	var (
-		temp   string
 		symbol string
-		lower  int  = 15
-		higher int  = 30
-		broken bool = false
+		temp   string
 	)
-	for current := 0; current < employee; current++ {
-		_, err := fmt.Scanln(&symbol, &temp)
-		if err != nil {
-			return fmt.Errorf("error while reading temprature line : %w", err)
+
+	lower := 15
+	higher := 30
+	var broken bool
+
+	for range employee {
+		if _, err := fmt.Scanln(&symbol, &temp); err != nil {
+			return fmt.Errorf("error while reading temperature line: %w", err)
 		}
 
 		if broken {
 			fmt.Println(-1)
+
 			continue
 		}
 
 		tempInt, isHigher, err := validateTemp(symbol, temp)
 		if err != nil {
-			return fmt.Errorf("error while validating temprature : %w", err)
-		} else {
-			if isHigher {
-				if tempInt > higher {
-					broken = true
-					fmt.Println(-1)
-					continue
-				}
-				if tempInt > lower {
-					lower = tempInt
-				}
-				fmt.Println(lower)
-			} else {
-				if tempInt < lower {
-					broken = true
-					fmt.Println(-1)
-					continue
-				}
-				if tempInt < higher {
-					higher = tempInt
-				}
-				fmt.Println(lower)
-			}
+			return fmt.Errorf("error while validating temperature: %w", err)
 		}
+
+		if isHigher {
+
+			if tempInt > higher {
+				broken = true
+				fmt.Println(-1)
+
+				continue
+			}
+
+			if tempInt > lower {
+				lower = tempInt
+			}
+
+			fmt.Println(lower)
+
+			continue
+		}
+
+		if tempInt < lower {
+			broken = true
+			fmt.Println(-1)
+
+			continue
+		}
+
+		if tempInt < higher {
+			higher = tempInt
+		}
+
+		fmt.Println(lower)
 	}
+
 	return nil
 }
 
-func validateTemp(symbol string, temp string) (int, bool, error) {
-
+func validateTemp(symbol, temp string) (int, bool, error) {
 	value, err := strconv.Atoi(temp)
 	if err != nil {
-		return 0, false, fmt.Errorf("error while converting string to int : %w", err)
+		return 0, false, fmt.Errorf("error while converting string to int: %w", err)
 	}
+
 	switch symbol {
 	case "<=":
 		return value, false, nil
@@ -92,6 +103,5 @@ func validateTemp(symbol string, temp string) (int, bool, error) {
 		return value, true, nil
 	default:
 		return 0, false, errors.New("could not match symbol - " + symbol)
-
 	}
 }
