@@ -6,6 +6,8 @@ import (
 	"strconv"
 )
 
+var ErrUnknownSymbol = errors.New("could not match symbol")
+
 func ClimateControl() error {
 	var (
 		departments int
@@ -103,6 +105,6 @@ func validateTemp(symbol, temp string) (int, bool, error) {
 	case ">=":
 		return value, true, nil
 	default:
-		return 0, false, errors.New("could not match symbol")
+		return 0, false, fmt.Errorf("%w: %q", ErrUnknownSymbol, symbol)
 	}
 }
