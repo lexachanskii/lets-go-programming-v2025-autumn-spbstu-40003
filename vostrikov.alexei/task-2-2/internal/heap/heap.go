@@ -10,17 +10,17 @@ func (heap *HeapInt) Swap(i int, j int) {
 	(*heap)[i], (*heap)[j] = (*heap)[j], (*heap)[i]
 }
 
-func (h *HeapInt) Push(x interface{}) {
+func (heap *HeapInt) Push(x interface{}) {
 	if x, ok := x.(int); ok {
-		*h = append(*h, x)
+		*heap = append(*heap, x)
 	}
 }
 
-func (h *HeapInt) Pop() interface{} {
-	old := *h
+func (heap *HeapInt) Pop() interface{} {
+	old := *heap
 	n := len(old)
 	x := old[n-1]
-	*h = old[0 : n-1]
+	*heap = old[0 : n-1]
 
 	return x
 }

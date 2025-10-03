@@ -9,7 +9,8 @@ import (
 )
 
 var (
-	errOutOfRange = errors.New("favourite dish number is bigger than dishes list length")
+	errOutOfRange    = errors.New("favourite dish number is bigger than dishes list length")
+	errDifferentTypr = errors.New("unexpected type")
 )
 
 func inputHeap(myheap *myHeap.HeapInt) (int, error) {
@@ -20,13 +21,11 @@ func inputHeap(myheap *myHeap.HeapInt) (int, error) {
 	)
 
 	if _, err := fmt.Scan(&dishes); err != nil {
-
 		return 0, fmt.Errorf("error while reading dishes count: %w", err)
 	}
 
 	for range dishes {
 		if _, err := fmt.Scan(&dishNum); err != nil {
-
 			return 0, fmt.Errorf("error while reading dishes list: %w", err)
 		}
 
@@ -34,7 +33,6 @@ func inputHeap(myheap *myHeap.HeapInt) (int, error) {
 	}
 
 	if _, err := fmt.Scan(&favourite); err != nil {
-
 		return 0, fmt.Errorf("error while reading favourite dish: %w", err)
 	}
 
@@ -43,7 +41,6 @@ func inputHeap(myheap *myHeap.HeapInt) (int, error) {
 
 func getFavourite(favourite int, myheap *myHeap.HeapInt) (int, error) {
 	if myheap.Len() < favourite {
-
 		return -1, fmt.Errorf("lenth error %w", errOutOfRange)
 	}
 
@@ -51,7 +48,12 @@ func getFavourite(favourite int, myheap *myHeap.HeapInt) (int, error) {
 		heap.Pop(myheap)
 	}
 
-	return heap.Pop(myheap).(int), nil
+	num, ok := heap.Pop(myheap).(int)
+	if !ok {
+		return -1, fmt.Errorf("error while popping value %w", errDifferentTypr)
+	}
+
+	return num, nil
 }
 
 func Table() (int, error) {
@@ -59,13 +61,11 @@ func Table() (int, error) {
 
 	favourite, err := inputHeap(&heap)
 	if err != nil {
-
 		return -1, fmt.Errorf("error in heap input %w", err)
 	}
 
 	bestDish, err := getFavourite(favourite, &heap)
 	if err != nil {
-
 		return -1, fmt.Errorf("error while getting favourite dish %w", err)
 	}
 
