@@ -10,6 +10,7 @@ func main() {
 	dish, err := table.Table()
 	if err != nil {
 		fmt.Println(err.Error())
+
 		return
 	}
 
