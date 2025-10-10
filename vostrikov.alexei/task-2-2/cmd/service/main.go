@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	table "github.com/lexachanskii/task-2-2/internal"
+	"github.com/lexachanskii/task-2-2/internal/table"
 )
 
 func main() {
