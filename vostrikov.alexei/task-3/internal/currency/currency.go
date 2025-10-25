@@ -3,16 +3,11 @@ package currency
 import (
 	"fmt"
 
-	"github.com/lexachanskii/task-3/internal/utils"
+	"github.com/lexachanskii/task-3/internal/fileformats"
 )
 
-func GetValues(configPath string) ([]utils.Val, error) {
-	cfg, err := utils.ReadYaml(configPath)
-	if err != nil {
-		return nil, fmt.Errorf("error while reading yaml %w", err)
-	}
-
-	res, err := utils.ReadXML(cfg.InputFile)
+func GetValues(inputPath string) ([]fileformats.Val, error) {
+	res, err := fileformats.ReadXML(inputPath)
 	if err != nil {
 		return nil, fmt.Errorf("error in reading xml %w", err)
 	}
@@ -20,13 +15,8 @@ func GetValues(configPath string) ([]utils.Val, error) {
 	return res, nil
 }
 
-func WriteValues(val []utils.Val, configPath string) error {
-	cfg, err := utils.ReadYaml(configPath)
-	if err != nil {
-		return fmt.Errorf("error while reading config %w", err)
-	}
-
-	err = utils.BuildJSON(val, cfg.OutputFile)
+func WriteValues(val []fileformats.Val, outputPath string) error {
+	err := fileformats.BuildJSON(val, outputPath)
 	if err != nil {
 		return fmt.Errorf("writevalues: %w", err)
 	}
